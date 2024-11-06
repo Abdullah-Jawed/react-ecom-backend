@@ -3,9 +3,12 @@ const app = express();
 const UserRouter = require('./routes/user');
 const CategoryRouter = require('./routes/category');
 const connectbd = require('./db/connection');
+const cors = require('cors');
+
 require('dotenv/config');
 
-
+app.use(cors());
+app.options('*', cors());
 
 
 connectbd();
