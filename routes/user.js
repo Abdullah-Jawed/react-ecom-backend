@@ -2,14 +2,23 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const Jwt = require('jsonwebtoken');
+const signupSchema = require('../validators/auth-validator');
+const validate = require('../middlewares/validator-middleware');
 
 
-router.post('/register', async function (req, res) {
+router.post('/register',validate(signupSchema), async function (req, res) {
     try {
+        const userExits = await User.findOne({email: req.body.email});
+        if(userExits){
+            return res.status(400).json({ message: "email already exists" });
+        }
         const user = new User(req.body);
         let result = await user.save();
-        Jwt.sign({ result }, process.env.jwtSecret, (err, token) => {
-            res.status(200).send({ auth: token });
+
+        const sendData = result.toObject();
+        delete sendData.password;
+        Jwt.sign({ sendData }, process.env.jwtSecret, (err, token) => {
+            res.status(200).json({ auth: token, message: "User created successfully" });
         });
     }
     catch (error) {
@@ -29,7 +38,7 @@ router.post('/login', async function (req, res) {
         }
         else {
             var message = (IfUser) ? "Incorrect Password" : "Email Not Found";
-            res.status(500).json({ message: message });
+            res.status(400).json({ message: message });
         }
     }
     catch (error) {
