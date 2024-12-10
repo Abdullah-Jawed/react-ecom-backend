@@ -4,8 +4,14 @@ const validate = (schema) => async (req, res, next) => {
         req.body = parseBody;
         next();
     } catch (err) {
-        console.log(err.errors[0].message);
-        res.status(400).json({message: err.errors[0].message});
+        function remove(object) {
+            return object.map(element => {
+                delete element.code;
+                return element;
+            });
+        }
+        const newobject = remove(err.errors);
+        res.status(400).json({ message: err.errors });
     }
 };
 
