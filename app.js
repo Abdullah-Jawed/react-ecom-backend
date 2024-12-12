@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const UserRouter = require('./routes/user');
 const CategoryRouter = require('./routes/category');
+const ProductRouter = require('./routes/products');
 const connectbd = require('./db/connection');
 const cors = require('cors');
 
@@ -22,3 +23,4 @@ app.listen(process.env.PORT, () => {
 
 app.use('/user', UserRouter);
 app.use('/category', CategoryRouter);
+app.use('/products', ProductRouter);
