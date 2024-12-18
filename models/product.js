@@ -28,6 +28,15 @@ const ProductSchema = mongoose.Schema({
     }
 });
 
+ProductSchema.virtual('product_media', {
+    ref: 'ProductMedia', // Model to reference
+    localField: '_id',   // Field in Product
+    foreignField: 'product_id' // Field in ProductMedia
+});
+
+
+ProductSchema.set('toJSON', { virtuals: true, id: false });
+ProductSchema.set('toObject', { virtuals: true, id: false });  
 
 const Product = mongoose.model('Product', ProductSchema);
 module.exports = Product;
