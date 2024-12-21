@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
+const { required } = require('../validators/auth-validator');
 
 const CategorySchema = mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    color: {
+    image_link: {
         type: String,
-        required: true
+        required: true,
     }
 });
 
